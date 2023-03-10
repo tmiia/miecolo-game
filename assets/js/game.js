@@ -1,5 +1,5 @@
 const listStates = ['harvest', 'threat']
-const interactions = ['smoke', 'hornet', 'harvest', 'repair']
+const interactions = ['repair', 'hornet','smoke', 'harvest']
 let nbHive = 0;
 const listHives = [];
 const listInteractions = [];
@@ -19,12 +19,22 @@ class Hive {
   }
   changeHiveState = function() {
     if(!this.isActive) {
-      console.log("isActive : false");
+      console.log("isActive : true");
       this.isActive = true;
       // De manière aléatoire, state.type prend une des valeur de listStates et ensuite selon si c'est un harvest ou une threat lui donner une intéraction
+      this.state.type = listStates[Math.floor(Math.random() * listStates.length)];
+      console.log(this.state.type);
+      if (this.state.type === 'threat'){
+        this.state.name = interactions[Math.floor(Math.random() * 2)];
+        console.log(this.state.name);
+      }
+      if (this.state.type === 'harvest'){
+        this.state.name = "smoke";
+        console.log(this.state.name);
+      }
     }
     else{
-      console.log("isActive : true");
+      console.log("isActive : false");
       this.isActive = false;
       this.state.type = null;
       this.state.name = null;
@@ -41,6 +51,7 @@ class Interaction {
   checkHiveState(hive){
     if(hive.state.type === 'threat'){
       console.log('menace');
+      
       // Ici on va update le score selon le type d'intéraction et le l'état de la ruche
     }
     else if (hive.state.type === 'harvest'){
@@ -58,6 +69,7 @@ function initInteractions() {
   for (var i = 0; i < interactions.length; i++){
     const interaction = new Interaction(i + 1 ,interactions[i], interactions[i] === 'harvest' ? 300 : 200);
     listInteractions.push(interaction);
+   
   }
 }
 initInteractions()
@@ -66,6 +78,7 @@ function selectInteraction(id) {
   for (var i = 0; i < listInteractions.length; i++){
     if(listInteractions[i].id === id){
       return listInteractions[i];
+      
     }
   }
 }
@@ -74,8 +87,10 @@ function selectHive(id) {
   for (var i = 0; i < listHives.length; i++){
     if(listHives[i].id === id){
       return listHives[i];
+      
     }
   }
+  
 }
 
 // -----------------------------------------------
@@ -100,7 +115,6 @@ function updateScoreByTime() {
 
 
 
-
 //   JEUX D'ESSAI
 
 const amountOfHives = 2;
@@ -110,7 +124,10 @@ for (var i = 0; i < amountOfHives; i++){
   listHives.push(hive);
 }
 
+
 selectInteraction(3).checkHiveState(selectHive(2).changeHiveState());
+
+
 
 // iterate over the array of listHives created and log their id
 // for (var i = 0; i < listHives.length; i++){
