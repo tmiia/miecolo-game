@@ -20,7 +20,7 @@ class Hive {
       name : 'null'
     },
     this.timer = null,
-    this.timeLoose = 5,
+    this.timeLoose = 15,
     this.isDone = false,
     this.isDead = false
   }
@@ -46,11 +46,6 @@ class Hive {
       }
 
       countdown(looseCountdown, looseInterval);
-      looseInterval = setInterval(() => {
-        countdown(looseCountdown, looseInterval);
-      }, 1000);
-      console.log("finito masterclass");
-
       looseDelay = setTimeout(() => {
         console.log("finito");
         if(!this.isDone){
@@ -59,6 +54,17 @@ class Hive {
         }
         clearTimeout(looseDelay);
       }, (this.timeLoose * 1000));
+
+      looseInterval = setInterval(() => {
+        countdown(looseCountdown, looseInterval);
+        if(this.isDone){
+          console.log("clear")
+          clearTimeout(looseDelay);
+          clearInterval(looseInterval);
+        }
+      }, 1000);
+      console.log("finito masterclass");
+
     }
     else{
       console.log("isActive : true");
