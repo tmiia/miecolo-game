@@ -1,11 +1,12 @@
 const listStates = ['harvest', 'threat'];
 const interactions = ['smoke', 'hornet', 'harvest', 'repair'];
-let nbHive = 0;
+let nbHive = 2;
+const maxHives = 8;
 const listHives = [];
 const listInteractions = [];
 let score = 0;
 let isSmoke = false;
-let timeToGenerateHive = 20;
+let timeToGenerateHive = 20000;
 const actionBtn =  document.querySelectorAll(".game__action");
 const hiveTemplate = document.getElementById("template-hive");
 const hiveContainer = document.querySelector(".game__hives-container");
@@ -38,6 +39,10 @@ class Hive {
         let sortedListInte = interactions.filter(interaction => interaction !== 'smoke' && interaction !== 'harvest');
         this.state.name = sortedListInte[Math.floor(Math.random() * sortedListInte.length)];
         console.log(`Voici notre liste triée avec la methode filter() ${sortedListInte} et voici name :  ${this.state.name}`);
+        document.querySelector("[data-id='"+ this.id +"']").style.backgroundColor = "orange";
+      }
+      else{
+        document.querySelector("[data-id='"+ this.id +"']").style.backgroundColor = "green";
       }
 
       countdown(looseCountdown, looseInterval);
@@ -138,20 +143,11 @@ function countdown(countdownInterval, countdownIntervalName) {
 
   let minutes = Math.floor((difference % (60 * 60)) / 60);
   let secondes = Math.floor(difference % 60);
-
-  console.log(secondes);
 }
 
 function endCountdown(countdownIntervalName) {
   clearInterval(countdownIntervalName)
 }
-
-// window.addEventListener('load', () => {
-//   countdown(countdownInterval);
-//   timerInterval = setInterval(() => {
-//     countdown(countdownInterval);
-//   }, 1000);
-// })
 
 // HANDLE HIVE
 
@@ -169,6 +165,18 @@ function initHive() {
   }
 }
 initHive();
+
+let generateHiveCountdown = new Date().setSeconds(new Date().getSeconds() + this.timegenerateHive);
+let generateHiveInterval;
+generateHiveInterval = setInterval(() => {
+  countdown(generateHiveCountdown, generateHiveInterval);
+  createHive(listHives.length + 1);
+  console.log(nbHive);
+  nbHive ++;
+  if(nbHive == maxHives){
+    clearInterval(generateHiveInterval);
+  }
+}, timeToGenerateHive);
 
 function selectHive(id) {
   for (var i = 0; i < listHives.length; i++){
