@@ -5,6 +5,7 @@ const listHives = [];
 const listInteractions = [];
 let score = 0;
 let isSmoke = false;
+let timeToGenerateHive = 20;
 const actionBtn =  document.querySelectorAll(".game__action");
 const hiveTemplate = document.getElementById("template-hive");
 const hiveContainer = document.querySelector(".game__hives-container");
@@ -14,8 +15,8 @@ class Hive {
     this.id = id;
     this.isActive = false,
     this.state = {
-      type : 'harvest',
-      name : 'harvest'
+      type : 'null',
+      name : 'null'
     },
     this.timer = null,
     this.timeLoose = 5,
@@ -28,8 +29,16 @@ class Hive {
       this.isActive = true;
       let looseCountdown = new Date().setSeconds(new Date().getSeconds() + this.timeLoose);
       let looseInterval;
+      let looseDelay;
 
+      this.state.type = listStates[Math.floor(Math.random() * listStates.length)];
+      console.log(`la state de la hive ${this.state.type}`)
 
+      if(this.state.type === 'threat' ){
+        let sortedListInte = interactions.filter(interaction => interaction !== 'smoke' && interaction !== 'harvest');
+        this.state.name = sortedListInte[Math.floor(Math.random() * sortedListInte.length)];
+        console.log(`Voici notre liste triée avec la methode filter() ${sortedListInte} et voici name :  ${this.state.name}`);
+      }
 
       countdown(looseCountdown, looseInterval);
       looseInterval = setInterval(() => {
