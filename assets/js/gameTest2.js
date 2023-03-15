@@ -14,17 +14,20 @@ let play = true,
     timeToChangeState = 7000,
     nbHive = 0,
     winPoints = 300,
-    lives = 3;
+    lives = 3,
+    honeyPot = 0;
 
 let timer1,
     timer2;
 
-const actionBtn =  document.querySelectorAll(".game__action");
+const actionBtn =  document.querySelectorAll(".game__action"),
+      scale = document.querySelector('.scale');
 
 const hiveTemplate = document.getElementById("template-hive"),
       hiveContainer = document.querySelector(".game__hives-container");
 
 let scoreInterface = document.querySelector("#score");
+let honeyPotInterface = document.querySelector('.honey-pot');
 
 class Hive {
   constructor(id){
@@ -46,7 +49,6 @@ class Hive {
       this.isActive = true;
       // DONNE VALEUR STATE DE MANIÈRE ALÉATOIRE :
       this.state.type = listStates[Math.floor(Math.random() * listStates.length)];
-      console.log(`la state de la hive ${this.id} est : ${this.state.type}`);
       // MARQUE LA DATE DE REF DU CHANGEMENT D'ETAT
       this.state.startTime = new Date().getTime();
 
@@ -106,7 +108,6 @@ class Hive {
       }
     }
     else if (this.state.type === 'harvest'){
-      console.log('récolte');
       return "harvest"
     }
   }
@@ -147,27 +148,25 @@ class Hive {
           isSmoke = true;
           score += winPoints/2;
           updateScore();
-          console.log(`on smoke +150pts - total : ${score}`)
         }
         else if (interaction === 'harvest'){
           if(isSmoke){
             score += winPoints*2;
             isSmoke = false;
+            honeyPot ++;
+            honeyPot >= 3 ? scale.disabled = false : scale.disabled = true;
+            honeyPotInterface.innerText = `HoneyPot : ${honeyPot}`;
             this.win(hive);
             updateScore();
-            console.log(300 + `miel récolté +600pts - total : ${score}`);
           }
           else{
             score -= winPoints/2;
             updateScore();
-            console.log("-" + (300/2) + `miel pas récolté -150pts - total : ${score}`);
           }
         }
         else{
           score -= winPoints/2;
           updateScore();
-          console.log("-" + (300/2) + `miel pas récolté pas du tout la bonne interaction connard -150pts - total : ${score}`);
-
         }
 
       }
@@ -176,18 +175,15 @@ class Hive {
           this.win(hive);
           score += winPoints;
           updateScore();
-          console.log(`hornet cleared +300pts pts total : ${score}`);
         }
         else if (hiveState === 'repair' && interaction === hiveState){
           this.win(hive);
           score += winPoints;
           updateScore();
-          console.log(`hive repaired +300pts pts total : ${score}`)
         }
         else{
           score -= winPoints/2;
           updateScore();
-          console.log(`mauvaise intéraction connard on perd -150pts - total : ${score} `);
 
         }
       }
@@ -197,10 +193,10 @@ class Hive {
 
 function Game() {
   initHive();
+  buyScale();
 
     //score augmente toutes les secondes
     scoreInterval = setInterval(() => {
-      console.log(score);
       updateScore();
       score ++;
     }, 1000);
@@ -223,12 +219,18 @@ function Game() {
   actionBtn.forEach(action =>{
     action.addEventListener('click', ()=>{
       interaction = action.dataset['type'];
-      console.log(`La valeur de l'interaction est : ${interaction}`);
     })
   })
 }
 
 Game();
+
+function buyScale() {
+  scale.addEventListener('click', ()=>{
+    honeyPot -= 3;
+    honeyPotInterface.innerText = `HoneyPot : ${honeyPot}`;
+  })
+}
 
 function updateScore(){
   scoreInterface.innerHTML = `Score : ${score}`;
@@ -247,7 +249,6 @@ function createHive(newId) {
 
   newHive.addEventListener('click', ()=>{
     let currentHive = selectHive(parseInt(newHive.dataset['id']));
-    console.log(`you click on hive id = ${currentHive.id} `)
     if (interaction != null && currentHive.isActive) {
       currentHive.action(currentHive, currentHive.checkHiveState());
     }
