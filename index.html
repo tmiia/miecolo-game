@@ -9,10 +9,10 @@
 <body>
   <div class="game">
     <div class="game__interface">
-      <button class="game__action" data-type="smoke" data-hive=null disabled>Smoke</button>
-      <button class="game__action" data-type="harvest" data-hive=null disabled>harvest</button>
-      <button class="game__action" data-type="hornet" data-hive=null disabled>Hornet</button>
-      <button class="game__action" data-type="repair" data-hive=null disabled>Repair</button>
+      <button class="game__action" data-type="smoke" data-hive=null>Smoke</button>
+      <button class="game__action" data-type="harvest" data-hive=null>harvest</button>
+      <button class="game__action" data-type="hornet" data-hive=null>Hornet</button>
+      <button class="game__action" data-type="repair" data-hive=null>Repair</button>
     </div>
     <div class="game__hives-container">
 
@@ -36,9 +36,21 @@
       width: 300px;
       min-height: 200px;
     }
+    .hives.harvest{
+      background-color: green;
+    }
+    .hives.repair{
+      background-color: orange;
+    }
+    .hives.hornet{
+      background-color: rgb(0, 119, 255);
+    }
+    .hives.destroy{
+      display: none;
+    }
   </style>
 
 
-  <script src="./assets/js/game.js"></script>
+  <script src="./assets/js/gameTest2.js"></script>
 </body>
 </html>
