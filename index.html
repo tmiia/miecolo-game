@@ -7,7 +7,51 @@
   <title>Miecolo Game</title>
 </head>
 <body>
+  <div class="game">
+    <div class="game__interface">
+      <span id="score" style="margin: 10px;"></span>
+      <button class="game__action" data-type="smoke" data-hive=null>Smoke</button>
+      <button class="game__action" data-type="harvest" data-hive=null>harvest</button>
+      <button class="game__action" data-type="hornet" data-hive=null>Hornet</button>
+      <button class="game__action" data-type="repair" data-hive=null>Repair</button>
+    </div>
+    <div class="game__hives-container">
 
-  <script src="./assets/js/game.js"></script>
+      <template id="template-hive">
+        <div class="hives">
+          <span>hive antoine</span>
+        </div>
+      </template>
+
+    </div>
+  </div>
+
+  <style>
+    .game__hives-container{
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+    }
+    .hives{
+      background-color: rgb(133, 42, 42);
+      width: 300px;
+      min-height: 200px;
+    }
+    .hives.harvest{
+      background-color: green;
+    }
+    .hives.repair{
+      background-color: orange;
+    }
+    .hives.hornet{
+      background-color: rgb(0, 119, 255);
+    }
+    .hives.destroy{
+      display: none;
+    }
+  </style>
+
+
+  <script src="./assets/js/gameTest2.js"></script>
 </body>
 </html>

@@ -1,19 +1,13 @@
-<<<<<<< HEAD
-const listStates = ['harvest', 'threat']
-const interactions = ['repair', 'hornet','smoke', 'harvest']
-let nbHive = 0;
-=======
 const listStates = ['harvest', 'threat'];
 const interactions = ['smoke', 'hornet', 'harvest', 'repair'];
 let nbHive = 2;
 const maxHives = 8;
->>>>>>> 116b4098a3b3251dc4d889033f219d3c09bb0186
 const listHives = [];
 const listInteractions = [];
 let score = 0;
 let isSmoke = false;
 let timeToGenerateHive = 20000;
-let timeToChangeState = 5000;
+let timeToChangeState = 7000;
 const actionBtn =  document.querySelectorAll(".game__action");
 const hiveTemplate = document.getElementById("template-hive");
 const hiveContainer = document.querySelector(".game__hives-container");
@@ -23,34 +17,78 @@ class Hive {
     this.id = id;
     this.isActive = false,
     this.state = {
-      type : 'null',
-      name : 'null'
+      type : null,
+      name : null
     },
     this.timer = null,
-    this.timeLoose = 15,
+    this.timeLoose = 5000,
     this.isDone = false,
-    this.isDead = false
+    this.isDead = false,
+    this.startActiveDate = null,
+    this.listTimeout = []
+  }
+
+  onChange(){
+    myTimeRef = new Date().getTime();
+    myState = rand(4); // mise à jour de l'état de la ruche parmis (repos, recolte, réparation, killthemAll)
+    upDateRender();// mis à jour de l'allure de la ruche
+    myTimer = setTimeout(() => {
+      onChange();
+    }, tpsRand);
+  }
+
+  // activePeriod = function() {
+  //   let activePeriod;
+  //   activePeriod = setTimeout(() => {
+  //    this.listTimeout.push(activePeriod);
+  //     sleepTimeout();
+  //   }, this.timeLoose);
+  // }
+  // sleepTimeout = function(){
+  //   let sleepingPeriod;
+  //   sleepingPeriod = setTimeout(() => {
+  //     this.listTimeout.push(sleepingPeriod);
+  //     activePeriod()
+  //   }, timeToChangeState);
+  // }
+  startInterval =  function() {
+    // if(this.sleepingPeriod && this.activePeriod){
+    //   clearTimeout(this.sleepingPeriod);
+    //   clearTimeout(this.activePeriod);
+    // }
+    let sleepingPeriod,
+        activePeriod;
+    sleepingPeriod = setTimeout(() => {
+      if(!this.listTimeout.includes(sleepingPeriod)){
+        this.listTimeout.push(sleepingPeriod);
+      }
+      this.changeHiveState()
+      this.startActiveDate = new Date().getTime();
+      activePeriod = setTimeout(() => {
+        if(!this.listTimeout.includes(activePeriod)){
+          this.listTimeout.push(activePeriod);
+        }
+        clearTimeout(activePeriod);
+        clearTimeout(sleepingPeriod);
+        console.log("you loose man");
+        this.startInterval();
+      }, this.timeLoose);
+    }, timeToChangeState);
+  }
+  endInterval = function() {
+    console.log("enfait jsuis trop nul jsuis censé clear putain")
+    for (let i = 0; i < this.listTimeout.length; i++) {
+      console.log(this.listTimeout[i]);
+      clearTimeout(this.listTimeout[i]);
+    }
   }
   changeHiveState = function() {
     if(!this.isActive) {
-      console.log("isActive : true");
+      console.log("isActive : false");
       this.isActive = true;
-<<<<<<< HEAD
-      // De manière aléatoire, state.type prend une des valeur de listStates et ensuite selon si c'est un harvest ou une threat lui donner une intéraction
-      this.state.type = listStates[Math.floor(Math.random() * listStates.length)];
-      console.log(this.state.type);
-      if (this.state.type === 'threat'){
-        this.state.name = interactions[Math.floor(Math.random() * 2)];
-        console.log(this.state.name);
-      }
-      if (this.state.type === 'harvest'){
-        this.state.name = "smoke";
-        console.log(this.state.name);
-      }
-=======
-      let looseCountdown = new Date().setSeconds(new Date().getSeconds() + this.timeLoose);
-      let looseInterval;
-      let looseDelay;
+      // let looseCountdown = new Date().setSeconds(new Date().getSeconds() + this.timeLoose);
+      // let looseInterval;
+      // let looseDelay;
 
       this.state.type = listStates[Math.floor(Math.random() * listStates.length)];
       console.log(`la state de la hive ${this.state.type}`)
@@ -81,31 +119,9 @@ class Hive {
           hiveElColor.classList.add("repair");
         }
       }
-
-      countdown(looseCountdown, looseInterval);
-      looseDelay = setTimeout(() => {
-        console.log("finito");
-        if(!this.isDone){
-          console.log("c'est la loooooooooooooooose");
-          this.isDead = true;
-        }
-        clearTimeout(looseDelay);
-      }, (this.timeLoose * 1000));
-
-      looseInterval = setInterval(() => {
-        countdown(looseCountdown, looseInterval);
-        if(this.isDone){
-          console.log("clear")
-          clearTimeout(looseDelay);
-          clearInterval(looseInterval);
-        }
-      }, 1000);
-      console.log("finito masterclass");
-
->>>>>>> 116b4098a3b3251dc4d889033f219d3c09bb0186
     }
     else{
-      console.log("isActive : false");
+      console.log("isActive : true");
       this.isActive = false;
       this.state.type = null;
       this.state.name = null;
@@ -121,18 +137,12 @@ class Interaction {
   }
   checkHiveState(hive){
     if(hive.state.type === 'threat'){
-<<<<<<< HEAD
-      console.log('menace');
-      
-      // Ici on va update le score selon le type d'intéraction et le l'état de la ruche
-=======
       if(hive.state.name === 'hornet'){
         return 'hornet'
       }
       else{
         return 'repair'
       }
->>>>>>> 116b4098a3b3251dc4d889033f219d3c09bb0186
     }
     else if (hive.state.type === 'harvest'){
       console.log('récolte');
@@ -148,9 +158,17 @@ class Interaction {
       }
       else if (this.type === 'harvest'){
         if(isSmoke){
+          let now = new Date().getTime();
+          hive.endInterval();
+          let reactionTime = (now - hive.startActiveDate) / 1000;
+          hive.startInterval();
+          console.log(reactionTime);
           console.log(this.point + " miel récolté");
           hive.isDone = true;
           isSmoke = false;
+
+          // A SUPP
+          document.querySelector("[data-id='"+ hive.id +"']").className = "hives";
         }
         else{
           console.log("-" + (this.point/2) + " miel pas récolté");
@@ -165,55 +183,30 @@ class Interaction {
       if (hiveState === 'hornet' && this.type === hiveState){
           console.log('hornet cleared');
           hive.isDone = true;
+          let now = new Date().getTime();
+          hive.endInterval();
+          let reactionTime = (now - hive.startActiveDate) / 1000;
+          hive.startInterval();
+          console.log(reactionTime);
+          // A SUPP
+          document.querySelector("[data-id='"+ hive.id +"']").className = "hives";
       }
       else if (hiveState === 'repair' && this.type === hiveState){
         console.log('hive repaired');
           hive.isDone = true;
+          let now = new Date().getTime();
+          hive.endInterval();
+          let reactionTime = (now - hive.startActiveDate) / 1000;
+          hive.startInterval();
+          console.log(reactionTime);
+          // A SUPP
+          document.querySelector("[data-id='"+ hive.id +"']").className = "hives";
       }
       else{
         console.log('mauvaise intérction connard on perd des points');
       }
     }
   }
-}
-
-<<<<<<< HEAD
-function initInteractions() {
-  for (var i = 0; i < interactions.length; i++){
-    const interaction = new Interaction(i + 1 ,interactions[i], interactions[i] === 'harvest' ? 300 : 200);
-    listInteractions.push(interaction);
-   
-  }
-}
-initInteractions()
-
-function selectInteraction(id) {
-  for (var i = 0; i < listInteractions.length; i++){
-    if(listInteractions[i].id === id){
-      return listInteractions[i];
-      
-=======
-// COUNTDOWN
-
-
-function countdown(countdownInterval, countdownIntervalName) {
-  const now = new Date().getTime();
-  const countdown = new Date(countdownInterval).getTime();
-  const difference = (countdown - now) / 1000;
-
-  if(difference < 1){
-    if (countdownIntervalName) {
-      endCountdown(countdownIntervalName);
->>>>>>> 116b4098a3b3251dc4d889033f219d3c09bb0186
-    }
-  }
-
-  let minutes = Math.floor((difference % (60 * 60)) / 60);
-  let secondes = Math.floor(difference % 60);
-}
-
-function endCountdown(countdownIntervalName) {
-  clearInterval(countdownIntervalName)
 }
 
 // HANDLE HIVE
@@ -223,6 +216,9 @@ function createHive(newId) {
   newHive.className = "hives";
   newHive.dataset.id = newId;
   hiveContainer.appendChild(newHive);
+
+  const hive = new Hive(i + 1);
+  listHives.push(hive);
 
   document.querySelectorAll(".hives").forEach(hive =>{
     newHive.addEventListener('click', ()=>{
@@ -235,46 +231,42 @@ function createHive(newId) {
 function initHive() {
   for (let i = 0; i < 2; i++) {
     createHive(i + 1);
-    const hive = new Hive(i + 1);
-    listHives.push(hive);
   }
 }
 initHive();
 
 /*Genereta hive by time*/
-let generateHiveCountdown = new Date().setSeconds(new Date().getSeconds() + this.timegenerateHive);
-let generateHiveInterval;
+// let generateHiveCountdown = new Date().setSeconds(new Date().getSeconds() + this.timegenerateHive);
+// let generateHiveInterval;
 
-generateHiveInterval = setInterval(() => {
-  countdown(generateHiveCountdown, generateHiveInterval);
-  createHive(listHives.length + 1);
-  const hive = new Hive(listHives.length + 1);
-  listHives.push(hive);
-  nbHive ++;
-  if(nbHive == maxHives){
-    clearInterval(generateHiveInterval);
-  }
-}, timeToGenerateHive);
+// generateHiveInterval = setInterval(() => {
+//   countdown(generateHiveCountdown, generateHiveInterval);
+//   createHive(listHives.length + 1);
+//   const hive = new Hive(listHives.length + 1);
+//   listHives.push(hive);
+//   nbHive ++;
+//   if(nbHive == maxHives){
+//     clearInterval(generateHiveInterval);
+//   }
+// }, timeToGenerateHive);
 
-/* Change hive state by time */
-changeHiveStateInterval = setInterval(() => {
-  let min = Math.ceil(1);
-  currentId = Math.round(Math.random() * (Math.floor(listHives.length) - min) + min)
-  if(selectHive(currentId).isActive === false){
-    hiveToChange = selectHive(currentId);
-    hiveToChange.changeHiveState();
-  }
-}, timeToChangeState)
+// /* Change hive state by time */
+// changeHiveStateInterval = setInterval(() => {
+//   let min = Math.ceil(1);
+//   currentId = Math.round(Math.random() * (Math.floor(listHives.length) - min) + min)
+//   if(selectHive(currentId).isActive === false){
+//     hiveToChange = selectHive(currentId);
+//     hiveToChange.changeHiveState();
+//   }
+// }, timeToChangeState)
 
 
 function selectHive(id) {
   for (var i = 0; i < listHives.length; i++){
     if(listHives[i].id === id){
       return listHives[i];
-      
     }
   }
-  
 }
 
 
@@ -337,7 +329,8 @@ function updateScoreByTime() {
 
 
 // const test = selectHive(1);
-// test.changeHiveState();
+selectHive(1).startInterval();
+
 
 
 //   JEUX D'ESSAI
@@ -349,14 +342,7 @@ function updateScoreByTime() {
 //   listHives.push(hive);
 // }
 
-<<<<<<< HEAD
-
-selectInteraction(3).checkHiveState(selectHive(2).changeHiveState());
-=======
 // selectInteraction(3).checkHiveState(selectHive(2).changeHiveState());
->>>>>>> 116b4098a3b3251dc4d889033f219d3c09bb0186
-
-
 
 // iterate over the array of listHives created and log their id
 // for (var i = 0; i < listHives.length; i++){
