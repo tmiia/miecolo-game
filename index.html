@@ -10,12 +10,12 @@
   <div class="game">
     <div class="game__interface">
       <span id="score" style="margin: 10px;">Score : 0</span>
-      <span class="honey-pot" style="margin: 10px;">honeyPot : 0</span>
+      <span class="honey-pot" style="margin: 10px;">honeyPot : 3</span>
       <button class="game__action" data-type="smoke" data-hive=null><img src="./assets/media/ui/smoke.svg" alt=""></button>
       <button class="game__action" data-type="harvest" data-hive=null><img src="./assets/media/ui/harvest.svg" alt=""></button>
-      <button class="game__action" data-type="hornet" data-hive=null><img src="./assets/media/ui/ambrella.svg" alt=""></button>
+      <button class="game__action" data-type="rain" data-hive=null><img src="./assets/media/ui/rain.svg" alt=""></button>
       <button class="game__action" data-type="repair" data-hive=null>Repair</button>
-      <button class="scale" disabled><img src="./assets/media/ui/scale.svg" alt=""></button>
+      <button class="game__scale"><img src="./assets/media/ui/scale.svg" alt=""></button>
     </div>
     <div class="game__hives-container">
 
@@ -35,6 +35,18 @@
     .game{
       display: flex;
     }
+    .game.smoke{
+      cursor: url('./assets/media/cursor/smoke.png'), auto;
+    }
+    .game.rain{
+      cursor: url('./assets/media/cursor/rain.png'), auto;
+    }
+    .game.harvest{
+      cursor: url('./assets/media/cursor/harvest.png'), auto;
+    }
+    .game.scale{
+      cursor: url('./assets/media/cursor/scale.png'), auto;
+    }
     .game__interface{
       display: flex;
       flex-direction: column;
@@ -45,7 +57,7 @@
       gap: 2rem;
       padding: 2rem;
     }
-    .game__action, .scale{
+    .game__action, .game__scale{
       display: block;
       padding: 1rem;
       border-radius: 10px;
@@ -54,10 +66,10 @@
       border: 1px solid rgb(234, 172, 0);
       cursor: pointer;
     }
-    .game__action:hover, .scale:hover{
+    .game__action:hover, .game__scale:hover{
       background-color: rgb(225, 195, 47);
     }
-    .game__action img, .scale img{
+    .game__action img, .game__scale img{
       width: 2rem;
       height: 2rem;
       cursor: pointer;
@@ -72,7 +84,6 @@
       width: 300px;
       max-height: 200px;
       border-radius: 30px;
-      cursor: pointer;
     }
     .hives.harvest{
       background-color: green;

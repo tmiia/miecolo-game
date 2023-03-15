@@ -1,6 +1,6 @@
 
 const listStates = ['harvest', 'threat'],
-      interactions = ['smoke', 'hornet', 'harvest', 'repair'],
+      interactions = ['smoke', 'rain', 'harvest', 'repair'],
       maxHives = 8,
       listHives = [],
       listInteractions = [];
@@ -16,13 +16,13 @@ let play = true,
     nbHive = 0,
     winPoints = 300,
     lives = 3,
-    honeyPot = 0;
+    honeyPot = 3;
 
 let timer1,
     timer2;
 
 const actionBtn =  document.querySelectorAll(".game__action"),
-      scale = document.querySelector('.scale');
+      scale = document.querySelector('.game__scale');
 
 const hiveTemplate = document.getElementById("template-hive"),
       hiveContainer = document.querySelector(".game__hives-container");
@@ -72,8 +72,8 @@ class Hive {
         hiveElColor.classList.add("harvest");
       }
       else{
-        if(this.state.name === 'hornet'){
-          hiveElColor.classList.add("hornet");
+        if(this.state.name === 'rain'){
+          hiveElColor.classList.add("rain");
         }
         else{
           hiveElColor.classList.add("repair");
@@ -103,8 +103,8 @@ class Hive {
 
   checkHiveState = function() {
     if(this.state.type === 'threat'){
-      if(this.state.name === 'hornet'){
-        return 'hornet'
+      if(this.state.name === 'rain'){
+        return 'rain'
       }
       else{
         return 'repair'
@@ -173,7 +173,7 @@ class Hive {
 
       }
       else{
-        if (hiveState === 'hornet' && interaction === hiveState){
+        if (hiveState === 'rain' && interaction === hiveState){
           this.win(hive);
           score += winPoints;
           updateScore();
@@ -223,6 +223,7 @@ function Game() {
   actionBtn.forEach(action =>{
     action.addEventListener('click', ()=>{
       interaction = action.dataset['type'];
+      cursorAnim(interaction);
     })
   })
 }
@@ -236,6 +237,7 @@ function buyScale() {
       isScaleSelected = true;
       interaction = null;
       honeyPotInterface.innerText = `HoneyPot : ${honeyPot}`;
+      cursorAnim('scale');
     }
   })
 }
@@ -267,6 +269,7 @@ function createHive(newId) {
 
   newHive.addEventListener('click', ()=>{
     let currentHive = selectHive(parseInt(newHive.dataset['id']));
+    cursorAnim(null)
     if (interaction != null && currentHive.isActive) {
       currentHive.action(currentHive, currentHive.checkHiveState());
     }
@@ -296,5 +299,25 @@ function selectHive(id) {
     if(listHives[i].id === id){
       return listHives[i];
     }
+  }
+}
+
+function cursorAnim(inteName){
+  document.querySelector(".game").className = "game";
+  document.querySelector(".game").classList.add(inteName);
+  console.log(inteName)
+  actionBtn.forEach(action => {
+    const imgEl = action.querySelector('img');
+    if (imgEl) {
+      imgEl.style.visibility = "visible";
+    }
+  });
+  scale.style.visibility = "visible"
+  if(inteName != "scale" && inteName != null){
+    document.querySelector(`[data-type='${inteName}']`).querySelector('img').style.visibility = "hidden";
+  }
+  else if(inteName === 'scale'){
+    console.log('cursor scale');
+    scale.querySelector('img').style.visibility = "hidden";
   }
 }
