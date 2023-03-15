@@ -113,8 +113,8 @@ class Hive {
 
   win = function(){
     const now = new Date().getTime();
-   
-    
+
+
     this.isDone = true;
     this.isActive = false;
     clearTimeout(this.looseTimer);
@@ -167,7 +167,7 @@ class Hive {
           score -= winPoints/2;
           updateScore();
           console.log("-" + (300/2) + `miel pas récolté pas du tout la bonne interaction connard -150pts - total : ${score}`);
-          
+
         }
 
       }
@@ -188,7 +188,7 @@ class Hive {
           score -= winPoints/2;
           updateScore();
           console.log(`mauvaise intéraction connard on perd -150pts - total : ${score} `);
-          
+
         }
       }
   }
@@ -205,7 +205,7 @@ function Game() {
       score ++;
     }, 1000);
 
-    setInterval(() => {
+    timer1 = setInterval(() => {
       let min = Math.ceil(1);
       currentId = Math.round(Math.random() * (Math.floor(listHives.length) - min) + min)
       if(selectHive(currentId).isActive === false){
@@ -231,8 +231,8 @@ function Game() {
 Game();
 
 function updateScore(){
-  scoreInterface.innerHTML = score;
-  
+  scoreInterface.innerHTML = `Score : ${score}`;
+
 }
 
 function createHive(newId) {
