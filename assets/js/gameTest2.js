@@ -5,6 +5,7 @@ const listStates = ['harvest', 'threat'],
       listHives = [],
       listInteractions = [];
 
+
 let play = true,
     interaction = null,
     score = 0,
@@ -14,6 +15,9 @@ let play = true,
     nbHive = 0,
     winPoints = 300,
     lives = 3;
+
+let timer1,
+    timer2;
 
 const actionBtn =  document.querySelectorAll(".game__action");
 
@@ -49,7 +53,7 @@ class Hive {
       if(this.state.type === 'threat' ){
         let sortedListInte = interactions.filter(interaction => interaction !== 'smoke' && interaction !== 'harvest');
         this.state.name = sortedListInte[Math.floor(Math.random() * sortedListInte.length)];
-        console.log(`Voici notre liste triée avec la methode filter() ${sortedListInte} et voici name :  ${this.state.name}`);
+
       }
 
       // TEST (A SUPP)
@@ -74,18 +78,18 @@ class Hive {
 
       this.looseTimer = setTimeout(() => {
         if (this.isDone === false) {
-          console.log("dans setTimeout Loose");
+
           this.loose();
         }
         else{
-          console.log("clear timeout")
+
           clearTimeout(this.looseTimer);
         }
       }, 4000);
 
     }
     else{
-      console.log("isActive : true");
+
       this.isActive = false;
       this.state.type = null;
       this.state.name = null;
@@ -115,8 +119,6 @@ class Hive {
     this.isActive = false;
     clearTimeout(this.looseTimer);
 
-    console.log("dans win");
-    console.log(this.looseTimer);
 
     // A SUPP
     document.querySelector("[data-id='"+ this.id +"']").className = "hives";
@@ -131,6 +133,8 @@ class Hive {
     destroyHive(this.id);
     if (lives < 1) {
       play = false;
+      clearInterval(timer1);
+      clearInterval(timer2);
       alert("finito pipot !!!");
       score = 0
       clearInterval(scoreInterval);
@@ -209,7 +213,7 @@ function Game() {
       }
     }, timeToChangeState);
 
-    setInterval(() => {
+    timer2 = setInterval(() => {
       if (nbHive < maxHives) {
         createHive(listHives.length + 1);
       }
