@@ -11,17 +11,17 @@
     <div class="game__interface">
       <span id="score" style="margin: 10px;">Score : 0</span>
       <span class="honey-pot" style="margin: 10px;">honeyPot : 0</span>
-      <button class="game__action" data-type="smoke" data-hive=null>Smoke</button>
-      <button class="game__action" data-type="harvest" data-hive=null>harvest</button>
-      <button class="game__action" data-type="hornet" data-hive=null>Hornet</button>
+      <button class="game__action" data-type="smoke" data-hive=null><img src="./assets/media/ui/smoke.svg" alt=""></button>
+      <button class="game__action" data-type="harvest" data-hive=null><img src="./assets/media/ui/harvest.svg" alt=""></button>
+      <button class="game__action" data-type="hornet" data-hive=null><img src="./assets/media/ui/ambrella.svg" alt=""></button>
       <button class="game__action" data-type="repair" data-hive=null>Repair</button>
-      <button class="scale" disabled>Balance</button>
+      <button class="scale" disabled><img src="./assets/media/ui/scale.svg" alt=""></button>
     </div>
     <div class="game__hives-container">
 
       <template id="template-hive">
         <div class="hives">
-          <span>hive antoine</span>
+          <span class="hive-info">hive antoine</span>
         </div>
       </template>
 
@@ -29,27 +29,80 @@
   </div>
 
   <style>
+    body{
+      font-family: Verdana, Geneva, Tahoma, sans-serif;
+    }
+    .game{
+      display: flex;
+    }
+    .game__interface{
+      display: flex;
+      flex-direction: column;
+    }
     .game__hives-container{
       display: flex;
       flex-wrap: wrap;
       gap: 2rem;
+      padding: 2rem;
+    }
+    .game__action, .scale{
+      display: block;
+      padding: 1rem;
+      border-radius: 10px;
+      margin: 0.5rem 0;
+      background-color: rgb(255, 224, 71);
+      border: 1px solid rgb(234, 172, 0);
+      cursor: pointer;
+    }
+    .game__action:hover, .scale:hover{
+      background-color: rgb(225, 195, 47);
+    }
+    .game__action img, .scale img{
+      width: 2rem;
+      height: 2rem;
+      cursor: pointer;
     }
     .hives{
-      background-color: rgb(133, 42, 42);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: aliceblue;
+      text-transform: uppercase;
+      background-color: rgb(238, 165, 31);
       width: 300px;
-      min-height: 200px;
+      max-height: 200px;
+      border-radius: 30px;
+      cursor: pointer;
     }
     .hives.harvest{
       background-color: green;
     }
+    .hives.smoked{
+      animation: smoke 0.5s ease-in-out forwards;
+    }
     .hives.repair{
-      background-color: orange;
+      background-color: rgb(115, 0, 255);
     }
     .hives.hornet{
       background-color: rgb(0, 119, 255);
     }
     .hives.destroy{
       display: none;
+    }
+    .hives.scale {
+      transform: scale(1.2);
+    }
+
+    @keyframes smoke {
+      0%{
+        background-color: green;
+      }
+      30%{
+        background-color: rgb(3, 83, 3);
+      }
+      60%{
+        background-color: green;
+      }
     }
   </style>
 

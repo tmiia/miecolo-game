@@ -8,6 +8,7 @@ const listStates = ['harvest', 'threat'],
 
 let play = true,
     interaction = null,
+    isScaleSelected = false,
     score = 0,
     isSmoke = false,
     timeToGenerateHive = 20000,
@@ -28,6 +29,7 @@ const hiveTemplate = document.getElementById("template-hive"),
 
 let scoreInterface = document.querySelector("#score");
 let honeyPotInterface = document.querySelector('.honey-pot');
+// let hiveInfo = document.querySelectorAll('.hive-info');
 
 class Hive {
   constructor(id){
@@ -41,7 +43,8 @@ class Hive {
     this.timeLoose = 5000,
     this.looseTimer = null,
     this.isDone = false,
-    this.isDead = false
+    this.isDead = false,
+    this.scale = false
   }
 
   changeHiveState = function() {
@@ -147,15 +150,14 @@ class Hive {
         if (interaction === 'smoke') {
           isSmoke = true;
           score += winPoints/2;
+          document.querySelector(`[data-id='${hive.id}']`).classList.add("smoked");
           updateScore();
         }
         else if (interaction === 'harvest'){
           if(isSmoke){
             score += winPoints*2;
             isSmoke = false;
-            honeyPot ++;
-            honeyPot >= 3 ? scale.disabled = false : scale.disabled = true;
-            honeyPotInterface.innerText = `HoneyPot : ${honeyPot}`;
+            updateHoneyPot();
             this.win(hive);
             updateScore();
           }
@@ -206,6 +208,8 @@ function Game() {
       currentId = Math.round(Math.random() * (Math.floor(listHives.length) - min) + min)
       if(selectHive(currentId).isActive === false){
         selectHive(currentId).changeHiveState();
+        document.querySelector(`[data-id='${currentId}']`).querySelector('.hive-info').innerText = selectHive(currentId).timeLoose;
+
       }
     }, timeToChangeState);
 
@@ -227,9 +231,23 @@ Game();
 
 function buyScale() {
   scale.addEventListener('click', ()=>{
-    honeyPot -= 3;
-    honeyPotInterface.innerText = `HoneyPot : ${honeyPot}`;
+    if(honeyPot >= 3){
+      honeyPot -= 3;
+      isScaleSelected = true;
+      interaction = null;
+      honeyPotInterface.innerText = `HoneyPot : ${honeyPot}`;
+    }
   })
+}
+
+function toggleScale() {
+  honeyPot >= 3 ? scale.disabled = false : scale.disabled = true;
+}
+
+function updateHoneyPot() {
+  honeyPot ++;
+  toggleScale();
+  honeyPotInterface.innerText = `HoneyPot : ${honeyPot}`;
 }
 
 function updateScore(){
@@ -251,6 +269,14 @@ function createHive(newId) {
     let currentHive = selectHive(parseInt(newHive.dataset['id']));
     if (interaction != null && currentHive.isActive) {
       currentHive.action(currentHive, currentHive.checkHiveState());
+    }
+    else if(isScaleSelected){
+      currentHive.scale = true;
+      toggleScale();
+
+      // A SUPP
+      newHive.classList.add('scale');
+      currentHive.timeLoose += 2000;
     }
   })
 }
