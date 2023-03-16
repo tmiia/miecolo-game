@@ -7,10 +7,13 @@
   <title>Miecolo Game</title>
 </head>
 <body>
+  <section style="min-height: 70vh;">
+    <button onclick="game()">Start Game</button>
+  </section>
   <div class="game">
     <div class="game__interface">
       <span id="score" style="margin: 10px;">Score : 0</span>
-      <span class="honey-pot" style="margin: 10px;">honeyPot : 3</span>
+      <span class="honey-pot" style="margin: 10px;">honeyPot : 0</span>
       <button class="game__action" data-type="smoke" data-hive=null><img src="./assets/media/ui/smoke.svg" alt=""></button>
       <button class="game__action" data-type="harvest" data-hive=null><img src="./assets/media/ui/harvest.svg" alt=""></button>
       <button class="game__action" data-type="rain" data-hive=null><img src="./assets/media/ui/rain.svg" alt=""></button>
@@ -21,7 +24,8 @@
 
       <template id="template-hive">
         <div class="hives">
-          <span class="hive-info">hive antoine</span>
+          <span class="hive-info-inte"></span>
+          <span class="hive-info-time"></span>
         </div>
       </template>
 
@@ -32,8 +36,22 @@
     body{
       font-family: Verdana, Geneva, Tahoma, sans-serif;
     }
+    section{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    section button{
+      background-color: rgb(255, 225, 0);
+      padding: 1rem 2rem;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+    }
     .game{
       display: flex;
+      min-height: 100vh;
+      background-color: rgb(255, 253, 240);
     }
     .game.smoke{
       cursor: url('./assets/media/cursor/smoke.png'), auto;
@@ -94,7 +112,7 @@
     .hives.repair{
       background-color: rgb(115, 0, 255);
     }
-    .hives.hornet{
+    .hives.rain{
       background-color: rgb(0, 119, 255);
     }
     .hives.destroy{

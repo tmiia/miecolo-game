@@ -16,7 +16,7 @@ let play = true,
     nbHive = 0,
     winPoints = 300,
     lives = 3,
-    honeyPot = 3;
+    honeyPot = 0;
 
 let timer1,
     timer2;
@@ -58,7 +58,10 @@ class Hive {
       if(this.state.type === 'threat' ){
         let sortedListInte = interactions.filter(interaction => interaction !== 'smoke' && interaction !== 'harvest');
         this.state.name = sortedListInte[Math.floor(Math.random() * sortedListInte.length)];
-
+        console.log(this.state.name);
+      }
+      else{
+        console.log(this.state.type)
       }
 
       // TEST (A SUPP)
@@ -193,7 +196,7 @@ class Hive {
 };
 
 
-function Game() {
+function game() {
   initHive();
   buyScale();
 
@@ -208,8 +211,7 @@ function Game() {
       currentId = Math.round(Math.random() * (Math.floor(listHives.length) - min) + min)
       if(selectHive(currentId).isActive === false){
         selectHive(currentId).changeHiveState();
-        document.querySelector(`[data-id='${currentId}']`).querySelector('.hive-info').innerText = selectHive(currentId).timeLoose;
-
+        document.querySelector(`[data-id='${currentId}']`).querySelector('.hive-info-time').innerText = selectHive(currentId).timeLoose;
       }
     }, timeToChangeState);
 
@@ -228,7 +230,7 @@ function Game() {
   })
 }
 
-Game();
+
 
 function buyScale() {
   scale.addEventListener('click', ()=>{
