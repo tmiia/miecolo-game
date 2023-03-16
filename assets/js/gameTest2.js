@@ -12,11 +12,12 @@ let play = true,
     isScaleSelected = false,
     score = 0,
     isSmoke = false,
-    timeToGenerateHive = 20000,
-    timeToChangeState = 5000,
+    timeToGenerateHive = 10000,
+    timeToChangeState = 4500,
     nbHive = 0,
     winPoints = 300,
     lives = 3,
+    isAllHivesCreated=false,
     honeyPot = 3;
 
 let timer1,
@@ -92,14 +93,14 @@ class Hive {
 
       this.looseTimer = setTimeout(() => {
         if (this.isDone === false) {
-
+          console.log("une ruche de -");
           this.loose();
         }
         else{
 
           clearTimeout(this.looseTimer);
         }
-      }, 4000);
+      }, this.timeLoose);
 
     }
     else{
@@ -240,7 +241,7 @@ class Hive {
 };
 
 
-function Game() {
+function game() {
   initHive();
   buyScale();
   toggleScale();
@@ -255,13 +256,11 @@ function Game() {
       currentId = Math.round(Math.random() * (Math.floor(listHives.length) - min) + min)
       if(selectHive(currentId).isActive === false){
         selectHive(currentId).changeHiveState();
-        document.querySelector(`[data-id='${currentId}']`).querySelector('.hive-info').innerText = selectHive(currentId).timeLoose;
-
       }
     }, timeToChangeState);
 
     timer2 = setInterval(() => {
-      if (nbHive < maxHives) {
+      if (nbHive < maxHives && isAllHivesCreated === false) {
         createHive(listHives.length + 1);
       }
     }, timeToGenerateHive);
@@ -275,7 +274,6 @@ function Game() {
   })
 }
 
-Game();
 
 function buyScale() {
   scale.addEventListener('click', ()=>{
@@ -318,6 +316,8 @@ function ratioScore(ratio){
   }
 }
 
+
+
 // function changeColorScore(){
 //   scoreInterface.style.color = "red";
 //   colorScore = setTimeout(() => {
@@ -333,6 +333,8 @@ function createHive(newId) {
   newHive.dataset.id = newId;
   hiveContainer.appendChild(newHive);
   nbHive ++;
+  nbHive === maxHives ? isAllHivesCreated = true : isAllHivesCreated = false;
+  console.log(isAllHivesCreated);
 
   const hive = new Hive(newId);
   listHives.push(hive);
