@@ -158,36 +158,52 @@ class Hive {
         }
         else if (interaction === 'harvest'){
           if(isSmoke){
-            score += winPoints*2;
             isSmoke = false;
             updateHoneyPot();
-            this.win(hive);
+            let ratio = this.win(hive);
+            ratioScore(ratio);
+            console.log(ratio);
             updateScore();
           }
           else{
+            // changeColorScore();
+            if(score >= 150){
             score -= winPoints/2;
+            }else{
+              score=0;
+            }
             updateScore();
           }
         }
         else{
-          score -= winPoints/2;
+          // changeColorScore();
+          if(score >= 150){
+            score -= winPoints/2;
+            }else{
+              score=0;
+            }
           updateScore();
         }
 
       }
       else{
         if (hiveState === 'rain' && interaction === hiveState){
-          this.win(hive);
-          score += winPoints;
+          ratio = this.win(hive);
+          ratioScore(ratio);
           updateScore();
         }
         else if (hiveState === 'repair' && interaction === hiveState){
-          this.win(hive);
-          score += winPoints;
+          ratio = this.win(hive);
+          ratioScore(ratio);
           updateScore();
         }
         else{
-          score -= winPoints/2;
+          // changeColorScore();
+          if(score >= 150){
+            score -= winPoints/2;
+            }else{
+              score=0;
+            }
           updateScore();
 
         }
@@ -258,6 +274,30 @@ function updateScore(){
   scoreInterface.innerHTML = `Score : ${score}`;
 
 }
+
+function ratioScore(ratio){
+  if(ratio < 2){
+    score += winPoints*2,5;
+    console.log('moins de 1 seconde');
+  }
+  else if(2 <= ratio < 3){
+    score += winPoints*2;
+    console.log('moins de 3 secondes');
+  }
+  else{
+    score += winPoints;
+    console.log('plus de 3 secondes');
+  }
+}
+
+// function changeColorScore(){
+//   scoreInterface.style.color = "red";
+//   colorScore = setTimeout(() => {
+//     scoreInterface.style.color = "black";
+//     console.log('mettre en noir');
+//   },1000);
+//   clearTimeout(colorScore);
+// }
 
 function createHive(newId) {
   const newHive = hiveTemplate.content.firstElementChild.cloneNode(true);
