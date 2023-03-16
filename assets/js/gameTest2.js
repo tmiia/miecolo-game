@@ -12,11 +12,11 @@ let play = true,
     score = 0,
     isSmoke = false,
     timeToGenerateHive = 20000,
-    timeToChangeState = 7000,
+    timeToChangeState = 5000,
     nbHive = 0,
     winPoints = 300,
     lives = 3,
-    honeyPot = 0;
+    honeyPot = 3;
 
 let timer1,
     timer2;
@@ -40,7 +40,7 @@ class Hive {
       name : null,
       startTime: null,
     },
-    this.timeLoose = 5000,
+    this.timeLoose = 8000,
     this.looseTimer = null,
     this.isDone = false,
     this.isDead = false,
@@ -58,10 +58,7 @@ class Hive {
       if(this.state.type === 'threat' ){
         let sortedListInte = interactions.filter(interaction => interaction !== 'smoke' && interaction !== 'harvest');
         this.state.name = sortedListInte[Math.floor(Math.random() * sortedListInte.length)];
-        console.log(this.state.name);
-      }
-      else{
-        console.log(this.state.type)
+
       }
 
       // TEST (A SUPP)
@@ -69,17 +66,26 @@ class Hive {
       let hives = document.querySelectorAll(".hives");
       hives.forEach(hive =>{
         hive.className = "hives";
+        hive.querySelector('img').style.display = "none";
+
       })
 
       if (this.state.type === 'harvest') {
         hiveElColor.classList.add("harvest");
+        hiveElColor.style.backgroundImage = "url('../../assets/img-hives/ruche_mielAbeille.svg')"; 
+        
       }
       else{
         if(this.state.name === 'rain'){
           hiveElColor.classList.add("rain");
+          hiveElColor.getElementsByTagName('img')[0].src = "../../assets/img-hives/pluie.svg";
+          hiveElColor.querySelector('img').style.display = "block";
+          
         }
         else{
           hiveElColor.classList.add("repair");
+          hiveElColor.querySelector('img').src = "../../assets/img-hives/voleur.svg";
+          hiveElColor.querySelector('img').style.display = "block";
         }
       }
 
@@ -126,7 +132,7 @@ class Hive {
     this.isActive = false;
     clearTimeout(this.looseTimer);
 
-
+    // document.querySelector("[data-id='"+ this.id +"']");
     // A SUPP
     document.querySelector("[data-id='"+ this.id +"']").className = "hives";
 
@@ -149,11 +155,18 @@ class Hive {
   }
 
   action = function (hive, hiveState){
+    
+    let hiveElColor = document.querySelector("[data-id='"+ this.id +"']");
+    console.log(hiveElColor);
       if(hiveState === 'harvest'){
         if (interaction === 'smoke') {
           isSmoke = true;
           score += winPoints/2;
-          document.querySelector(`[data-id='${hive.id}']`).classList.add("smoked");
+          document.querySelector(`[data-id='${hive.id}']`).classList.add("smoked"); 
+          hiveElColor.querySelector('img').src = "../../assets/img-hives/fumée.svg";
+          hiveElColor.style.backgroundImage = "url('../../assets/img-hives/ruche_miel.svg')" ;
+          hiveElColor.querySelector('img').style.display = "block";
+          
           updateScore();
         }
         else if (interaction === 'harvest'){
@@ -163,10 +176,14 @@ class Hive {
             let ratio = this.win(hive);
             ratioScore(ratio);
             console.log(ratio);
+
+            hiveElColor.querySelector('img').style.display = "none";
+            hiveElColor.style.backgroundImage = "url('../../assets/img-hives/ruche_normale.svg')" ;
+
             updateScore();
           }
           else{
-            // changeColorScore();
+            //  ();
             if(score >= 150){
             score -= winPoints/2;
             }else{
@@ -188,13 +205,17 @@ class Hive {
       }
       else{
         if (hiveState === 'rain' && interaction === hiveState){
-          ratio = this.win(hive);
+          
+          let ratio = this.win(hive);
           ratioScore(ratio);
+          hiveElColor.querySelector('img').style.display = "none";
           updateScore();
         }
         else if (hiveState === 'repair' && interaction === hiveState){
-          ratio = this.win(hive);
+          
+          let ratio = this.win(hive);
           ratioScore(ratio);
+          hiveElColor.querySelector('img').style.display = "none";
           updateScore();
         }
         else{
@@ -212,7 +233,7 @@ class Hive {
 };
 
 
-function game() {
+function Game() {
   initHive();
   buyScale();
 
@@ -227,7 +248,8 @@ function game() {
       currentId = Math.round(Math.random() * (Math.floor(listHives.length) - min) + min)
       if(selectHive(currentId).isActive === false){
         selectHive(currentId).changeHiveState();
-        document.querySelector(`[data-id='${currentId}']`).querySelector('.hive-info-time').innerText = selectHive(currentId).timeLoose;
+        document.querySelector(`[data-id='${currentId}']`).querySelector('.hive-info').innerText = selectHive(currentId).timeLoose;
+
       }
     }, timeToChangeState);
 
@@ -246,7 +268,7 @@ function game() {
   })
 }
 
-
+Game();
 
 function buyScale() {
   scale.addEventListener('click', ()=>{
@@ -308,6 +330,13 @@ function createHive(newId) {
 
   const hive = new Hive(newId);
   listHives.push(hive);
+  let hives = document.querySelectorAll(".hives");
+  hives.forEach(hive =>{
+    hive.style.backgroundImage = "url('../../assets/img-hives/ruche_normale.svg')";
+    hive.style.backgroundRepeat = "no-repeat";
+    hive.style.backgroundPosition = "center";
+  })      
+
 
   newHive.addEventListener('click', ()=>{
     let currentHive = selectHive(parseInt(newHive.dataset['id']));
