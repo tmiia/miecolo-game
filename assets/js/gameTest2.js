@@ -1,4 +1,5 @@
 
+
 const listStates = ['harvest', 'threat'],
       interactions = ['smoke', 'rain', 'harvest', 'repair'],
       maxHives = 8,
@@ -61,7 +62,6 @@ class Hive {
 
       }
 
-      // TEST (A SUPP)
       let hiveElColor = document.querySelector("[data-id='"+ this.id +"']");
       let hives = document.querySelectorAll(".hives");
       hives.forEach(hive =>{
@@ -143,18 +143,21 @@ class Hive {
     this.isActive = false;
     lives --;
     this.isDead = true;
+
     destroyHive(this.id);
+
     if (lives < 1) {
       play = false;
       clearInterval(timer1);
       clearInterval(timer2);
+
       alert("finito pipot !!!");
       score = 0
       clearInterval(scoreInterval);
     }
   }
 
-  action = function (hive, hiveState){
+  action = function (hiveState){
     
     let hiveElColor = document.querySelector("[data-id='"+ this.id +"']");
     console.log(hiveElColor);
@@ -162,7 +165,7 @@ class Hive {
         if (interaction === 'smoke') {
           isSmoke = true;
           score += winPoints/2;
-          document.querySelector(`[data-id='${hive.id}']`).classList.add("smoked"); 
+          // document.querySelector(`[data-id='${hive.id}']`).classList.add("smoked"); 
           hiveElColor.querySelector('img').src = "../../assets/img-hives/fumée.svg";
           hiveElColor.style.backgroundImage = "url('../../assets/img-hives/ruche_miel.svg')" ;
           hiveElColor.querySelector('img').style.display = "block";
@@ -173,23 +176,23 @@ class Hive {
           if(isSmoke){
             isSmoke = false;
             updateHoneyPot();
-            let ratio = this.win(hive);
+            let ratio = this.win(selectHive(this.id));
             ratioScore(ratio);
             console.log(ratio);
 
             hiveElColor.querySelector('img').style.display = "none";
             hiveElColor.style.backgroundImage = "url('../../assets/img-hives/ruche_normale.svg')" ;
-
             updateScore();
           }
           else{
-            //  ();
             if(score >= 150){
             score -= winPoints/2;
             }else{
               score=0;
             }
             updateScore();
+
+            this.loose();
           }
         }
         else{
@@ -199,21 +202,24 @@ class Hive {
             }else{
               score=0;
             }
-          updateScore();
+            updateScore();
+
+            this.loose();
+          
         }
 
       }
       else{
         if (hiveState === 'rain' && interaction === hiveState){
           
-          let ratio = this.win(hive);
+          let ratio = this.win(selectHive(this.id));
           ratioScore(ratio);
           hiveElColor.querySelector('img').style.display = "none";
           updateScore();
         }
         else if (hiveState === 'repair' && interaction === hiveState){
           
-          let ratio = this.win(hive);
+          let ratio = this.win(selectHive(this.id));
           ratioScore(ratio);
           hiveElColor.querySelector('img').style.display = "none";
           updateScore();
@@ -227,6 +233,7 @@ class Hive {
             }
           updateScore();
 
+          this.loose();
         }
       }
   }
@@ -236,12 +243,12 @@ class Hive {
 function Game() {
   initHive();
   buyScale();
-
+  toggleScale();
     //score augmente toutes les secondes
     scoreInterval = setInterval(() => {
       updateScore();
       score ++;
-    }, 1000);
+    }, 700);
 
     timer1 = setInterval(() => {
       let min = Math.ceil(1);
@@ -294,7 +301,6 @@ function updateHoneyPot() {
 
 function updateScore(){
   scoreInterface.innerHTML = `Score : ${score}`;
-
 }
 
 function ratioScore(ratio){
@@ -342,12 +348,12 @@ function createHive(newId) {
     let currentHive = selectHive(parseInt(newHive.dataset['id']));
     cursorAnim(null)
     if (interaction != null && currentHive.isActive) {
-      currentHive.action(currentHive, currentHive.checkHiveState());
+      currentHive.action(currentHive.checkHiveState());
     }
     else if(isScaleSelected){
       currentHive.scale = true;
       toggleScale();
-
+      isScaleSelected = false;
       // A SUPP
       newHive.classList.add('scale');
       currentHive.timeLoose += 2000;
@@ -376,14 +382,13 @@ function selectHive(id) {
 function cursorAnim(inteName){
   document.querySelector(".game").className = "game";
   document.querySelector(".game").classList.add(inteName);
-  console.log(inteName)
   actionBtn.forEach(action => {
     const imgEl = action.querySelector('img');
     if (imgEl) {
       imgEl.style.visibility = "visible";
     }
   });
-  scale.style.visibility = "visible"
+  scale.querySelector('img').style.visibility = "visible";
   if(inteName != "scale" && inteName != null){
     document.querySelector(`[data-type='${inteName}']`).querySelector('img').style.visibility = "hidden";
   }

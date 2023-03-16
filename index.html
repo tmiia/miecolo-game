@@ -6,19 +6,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Miecolo Game</title>
 </head>
-<body>
+<body style="margin:0; padding:0;">
   <section style="min-height: 70vh;">
     <button onclick="game()">Start Game</button>
   </section>
-  <div class="game">
-    <div class="game__interface">
+  <div class="game" style="background-image: url('assets/fond_jeu.png');">
+    <div class="game__interface" style="margin: 20px;">
       <span id="score" style="margin: 10px;">Score : 0</span>
       <span class="honey-pot" style="margin: 10px;">honeyPot : 0</span>
       <button class="game__action" data-type="smoke" data-hive=null><img src="./assets/media/ui/smoke.svg" alt=""></button>
       <button class="game__action" data-type="harvest" data-hive=null><img src="./assets/media/ui/harvest.svg" alt=""></button>
       <button class="game__action" data-type="rain" data-hive=null><img src="./assets/media/ui/rain.svg" alt=""></button>
-      <button class="game__action" data-type="repair" data-hive=null>Repair</button>
-      <button class="game__scale"><img src="./assets/media/ui/scale.svg" alt=""></button>
+      <button class="game__action" data-type="repair" data-hive=null><img src="./assets/media/ui/phone.svg" alt=""></button>
+      <button class="game__scale" disabled><img src="./assets/media/ui/scale.svg" alt=""></button>
     </div>
     <div class="game__hives-container">
 
@@ -66,6 +66,10 @@
     .game.scale{
       cursor: url('./assets/media/cursor/scale.png'), auto;
     }
+    .game.repair{
+      cursor: url('./assets/media/cursor/phone.png'), auto;
+    }
+
     .game__interface{
       display: flex;
       flex-direction: column;
@@ -121,7 +125,8 @@
       display: none;
     }
     .hives.scale {
-      transform: scale(1.2);
+      /*  transform: scale(1.2);  */
+      background-color: brown;
     }
 
     @keyframes smoke {
