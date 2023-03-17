@@ -12,12 +12,13 @@ let play = true,
     score = 0,
     isSmoke = false,
     timeToGenerateHive = 10000,
-    timeToChangeState = 8000,
+    timeToChangeState = 5000,
     nbHive = 0,
     winPoints = 300,
     lives = 3,
     isAllHivesCreated=false,
     honeyPot = 3;
+    chrono = 300000;
 
 let timer1,
   timer2;
@@ -159,9 +160,11 @@ class Hive {
       clearInterval(timer1);
       clearInterval(timer2);
 
+      document.querySelector(".result").style.display = "block";
       
 
-      alert("finito pipot !!!");
+      alert("GameOver... Merci d'avoir joué !");
+      window.scrollTo(0, 300);
       score = 0
       clearInterval(scoreInterval);
     }
@@ -253,7 +256,20 @@ function game() {
   initHive();
   buyScale();
   toggleScale();
-    //score augmente toutes les secondes
+  document.querySelector('.btn-start').style.display = "none";
+
+    chronoGlobal = setInterval(() => {
+      chrono -= 60000;
+      if(chrono <= 0){
+     
+        endGame();
+        alert('gameover');
+        clearInterval(chronoGlobal);
+      } 
+    },60000);
+
+
+    //score augmente tous les 7 millièmes de secondes
     scoreInterval = setInterval(() => {
       updateScore();
       score ++;
