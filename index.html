@@ -5,9 +5,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Miecolo Game</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 </head>
-<body style="margin:0; padding:0;">
-  <section style="min-height: 70vh;">
+<body>
+  <section class="start">
     <button onclick="game()">Start Game</button>
   </section>
   <div class="game" style="background-image: url('assets/fond_jeu.png');">
@@ -33,16 +34,77 @@
     </div>
   </div>
 
+  <section class="result">
+    <h3>Trop bien !</h3>
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste deserunt necessitatibus magnam molestias corrupti mollitia error ab dolorem maxime in a fuga, doloremque corporis voluptates veritatis vero qui suscipit non.</p>
+
+    <div class="form">
+      <label for="email">Ton email : </label>
+      <input type="email" name="email" id="email" placeholder=" ex : beelie@miecolo.fr">
+      <label for="pseudo">Ton pseudo : </label>
+      <input type="pseudo" name="pseudo" id="pseudo" placeholder="ex : Beelie">
+      <button onclick="saveInfo()">Valider</button>
+    </div>
+    <div class="result__list">
+      <table>
+        <thead>
+            <tr>
+                <th colspan="1">Pseudo</th>
+                <th colspan="1">score</th>
+                <th colspan="1">Rang</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+
+            </tr>
+        </tbody>
+    </table>
+
+      <template id="result-item">
+        <td class="td-1"></td>
+        <td class="td-2"></td>
+        <td class="td-3"></td>
+      </template>
+    </div>
+  </section>
+
   <style>
     body{
       font-family: Verdana, Geneva, Tahoma, sans-serif;
     }
-    section{
+    .result{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .result .form{
+      width: 30rem;
+    }
+    .result .form input{
+      width: 100%;
+    }
+    .result .form label{
+      align-self: flex-start;
+    }
+    table,
+    td {
+        border: 1px solid #333;
+    }
+
+    thead,
+    tfoot {
+        background-color: #333;
+        color: #fff;
+    }
+
+    .start{
       display: flex;
       justify-content: center;
       align-items: center;
+      min-height: 70%;
     }
-    section button{
+    .start button{
       background-color: rgb(255, 225, 0);
       padding: 1rem 2rem;
       border-radius: 10px;
@@ -144,5 +206,6 @@
 
 
   <script src="./assets/js/gameTest2.js"></script>
+  <script src="./assets/js/result.js"></script>
 </body>
 </html>
