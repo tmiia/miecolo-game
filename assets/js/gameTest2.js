@@ -13,7 +13,7 @@ let play = true,
     score = 0,
     isSmoke = false,
     timeToGenerateHive = 10000,
-    timeToChangeState = 4500,
+    timeToChangeState = 8000,
     nbHive = 0,
     winPoints = 300,
     lives = 3,
@@ -42,7 +42,7 @@ class Hive {
       name : null,
       startTime: null,
     },
-    this.timeLoose = 8000,
+    this.timeLoose = 4500,
     this.looseTimer = null,
     this.isDone = false,
     this.isDead = false,
@@ -57,6 +57,17 @@ class Hive {
       // MARQUE LA DATE DE REF DU CHANGEMENT D'ETAT
       this.state.startTime = new Date().getTime();
 
+      this.looseTimer = setTimeout(() => {
+        if (this.isDone === false) {
+          console.log("une ruche de -");
+          this.loose();
+        }
+        else{
+
+          clearTimeout(this.looseTimer);
+        }
+      }, this.timeLoose);
+
       if(this.state.type === 'threat' ){
         let sortedListInte = interactions.filter(interaction => interaction !== 'smoke' && interaction !== 'harvest');
         this.state.name = sortedListInte[Math.floor(Math.random() * sortedListInte.length)];
@@ -68,7 +79,7 @@ class Hive {
       hives.forEach(hive =>{
         hive.className = "hives";
         hive.querySelector('img').style.display = "none";
-
+        
       })
 
       if (this.state.type === 'harvest') {
@@ -79,7 +90,7 @@ class Hive {
       else{
         if(this.state.name === 'rain'){
           hiveElColor.classList.add("rain");
-          hiveElColor.getElementsByTagName('img')[0].src = "../../assets/img-hives/pluie.svg";
+          hiveElColor.querySelector('img').src = "../../assets/img-hives/pluie.svg";
           hiveElColor.querySelector('img').style.display = "block";
           
         }
@@ -91,16 +102,7 @@ class Hive {
       }
 
 
-      this.looseTimer = setTimeout(() => {
-        if (this.isDone === false) {
-          console.log("une ruche de -");
-          this.loose();
-        }
-        else{
-
-          clearTimeout(this.looseTimer);
-        }
-      }, this.timeLoose);
+      
 
     }
     else{
@@ -133,9 +135,11 @@ class Hive {
     this.isActive = false;
     clearTimeout(this.looseTimer);
 
-    // document.querySelector("[data-id='"+ this.id +"']");
     // A SUPP
     document.querySelector("[data-id='"+ this.id +"']").className = "hives";
+    document.querySelector("[data-id='"+ this.id +"']").style.backgroundImage = "url('../../assets/img-hives/ruche_normale.svg') "
+    console.log('je suis là')
+    
 
     return (now - this.state.startTime) / 1000;
   }
@@ -144,13 +148,16 @@ class Hive {
     this.isActive = false;
     lives --;
     this.isDead = true;
-
+    document.querySelector("[data-id='"+ this.id +"']").style.backgroundImage = "url('../../assets/img-hives/ruche_normale.svg')";
+    console.log("omg");
     destroyHive(this.id);
 
     if (lives < 1) {
       play = false;
       clearInterval(timer1);
       clearInterval(timer2);
+
+      
 
       alert("finito pipot !!!");
       score = 0
@@ -161,7 +168,7 @@ class Hive {
   action = function (hiveState){
     
     let hiveElColor = document.querySelector("[data-id='"+ this.id +"']");
-    console.log(hiveElColor);
+    
       if(hiveState === 'harvest'){
         if (interaction === 'smoke') {
           isSmoke = true;
@@ -179,10 +186,10 @@ class Hive {
             updateHoneyPot();
             let ratio = this.win(selectHive(this.id));
             ratioScore(ratio);
-            console.log(ratio);
+            
 
             hiveElColor.querySelector('img').style.display = "none";
-            hiveElColor.style.backgroundImage = "url('../../assets/img-hives/ruche_normale.svg')" ;
+            // hiveElColor.style.backgroundImage = "url('../../assets/img-hives/ruche_normale.svg')" ;
             updateScore();
           }
           else{
@@ -251,6 +258,7 @@ function game() {
       score ++;
     }, 700);
 
+    // changement d'état des ruches
     timer1 = setInterval(() => {
       let min = Math.ceil(1);
       currentId = Math.round(Math.random() * (Math.floor(listHives.length) - min) + min)
@@ -259,6 +267,7 @@ function game() {
       }
     }, timeToChangeState);
 
+    // créer les ruches
     timer2 = setInterval(() => {
       if (nbHive < maxHives && isAllHivesCreated === false) {
         createHive(listHives.length + 1);
@@ -334,7 +343,7 @@ function createHive(newId) {
   hiveContainer.appendChild(newHive);
   nbHive ++;
   nbHive === maxHives ? isAllHivesCreated = true : isAllHivesCreated = false;
-  console.log(isAllHivesCreated);
+  
 
   const hive = new Hive(newId);
   listHives.push(hive);
@@ -365,6 +374,7 @@ function createHive(newId) {
 
 function destroyHive(id) {
   document.querySelector(`[data-id='${id}']`).classList.add("destroy");
+  console.log('ruche destroy');
 }
 
 function initHive() {
