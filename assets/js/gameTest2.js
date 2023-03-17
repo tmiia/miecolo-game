@@ -87,15 +87,15 @@ class Hive {
 
       if (this.state.type === 'harvest') {
         hiveElColor.classList.add("harvest");
-        hiveElColor.style.backgroundImage = "url('../../assets/img-hives/ruche_mielAbeille.svg')"; 
-        
+        hiveElColor.style.backgroundImage = "url('../../assets/img-hives/ruche_mielAbeille.svg')";
+
       }
       else {
         if (this.state.name === 'rain') {
           hiveElColor.classList.add("rain");
           hiveElColor.querySelector('img').src = "../../assets/img-hives/pluie.svg";
           hiveElColor.querySelector('img').style.display = "block";
-          
+
         }
         else {
           hiveElColor.classList.add("repair");
@@ -171,18 +171,18 @@ class Hive {
   }
 
   action = function (hiveState){
-    
+
     let hiveElColor = document.querySelector("[data-id='"+ this.id +"']");
     
       if(hiveState === 'harvest'){
         if (interaction === 'smoke') {
           isSmoke = true;
           score += winPoints/2;
-          // document.querySelector(`[data-id='${hive.id}']`).classList.add("smoked"); 
+          // document.querySelector(`[data-id='${hive.id}']`).classList.add("smoked");
           hiveElColor.querySelector('img').src = "../../assets/img-hives/fumée.svg";
           hiveElColor.style.backgroundImage = "url('../../assets/img-hives/ruche_miel.svg')" ;
           hiveElColor.querySelector('img').style.display = "block";
-          
+
           updateScore();
         }
         else if (interaction === 'harvest'){
@@ -218,7 +218,7 @@ class Hive {
             updateScore();
 
             this.loose();
-          
+
         }
     }
     else {
@@ -230,7 +230,7 @@ class Hive {
           updateScore();
         }
         else if (hiveState === 'repair' && interaction === hiveState){
-          
+
           let ratio = this.win(selectHive(this.id));
           ratioScore(ratio);
           hiveElColor.querySelector('img').style.display = "none";
@@ -369,7 +369,7 @@ function createHive(newId) {
     hive.style.backgroundImage = "url('../../assets/img-hives/ruche_normale.svg')";
     hive.style.backgroundRepeat = "no-repeat";
     hive.style.backgroundPosition = "center";
-  })      
+  })
 
 
   newHive.addEventListener('click', ()=>{

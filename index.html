@@ -43,6 +43,7 @@
       <input type="email" name="email" id="email" placeholder=" ex : beelie@miecolo.fr">
       <label for="pseudo">Ton pseudo : </label>
       <input type="pseudo" name="pseudo" id="pseudo" placeholder="ex : Beelie">
+      <input type="score" name="score" id="score" hidden>
       <button onclick="saveInfo()">Valider</button>
     </div>
     <div class="result__list">
@@ -60,12 +61,6 @@
             </tr>
         </tbody>
     </table>
-
-      <template id="result-item">
-        <td class="td-1"></td>
-        <td class="td-2"></td>
-        <td class="td-3"></td>
-      </template>
     </div>
   </section>
 
@@ -170,7 +165,7 @@
       max-height: 200px;
       border-radius: 30px;
     }
-    
+
     .hives.harvest{
       background-color: green;
     }
