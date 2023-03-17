@@ -83,7 +83,7 @@ class Hive {
       hives.forEach(hive => {
         hive.className = "hives";
         hive.querySelector('img').style.display = "none";
-        
+
       })
 
       if (this.state.type === 'harvest') {
@@ -106,7 +106,7 @@ class Hive {
       }
 
 
-      
+
 
     }
     else {
@@ -143,7 +143,7 @@ class Hive {
     document.querySelector("[data-id='"+ this.id +"']").className = "hives";
     document.querySelector("[data-id='"+ this.id +"']").style.backgroundImage = "url('../../assets/img-hives/ruche_normale.svg') "
     console.log('je suis là')
-    
+
 
     return (now - this.state.startTime) / 1000;
   }
@@ -175,7 +175,7 @@ class Hive {
   action = function (hiveState){
 
     let hiveElColor = document.querySelector("[data-id='"+ this.id +"']");
-    
+
       if(hiveState === 'harvest'){
         if (interaction === 'smoke') {
           isSmoke = true;
@@ -193,7 +193,7 @@ class Hive {
             updateHoneyPot();
             let ratio = this.win(selectHive(this.id));
             ratioScore(ratio);
-            
+
 
             hiveElColor.querySelector('img').style.display = "none";
             // hiveElColor.style.backgroundImage = "url('../../assets/img-hives/ruche_normale.svg')" ;
@@ -225,7 +225,7 @@ class Hive {
     }
     else {
       if (hiveState === 'rain' && interaction === hiveState){
-          
+
           let ratio = this.win(selectHive(this.id));
           ratioScore(ratio);
           hiveElColor.querySelector('img').style.display = "none";
@@ -367,7 +367,7 @@ function createHive(newId) {
   hiveContainer.appendChild(newHive);
   nbHive ++;
   nbHive === maxHives ? isAllHivesCreated = true : isAllHivesCreated = false;
-  
+
 
   const hive = new Hive(newId);
   listHives.push(hive);
@@ -432,4 +432,44 @@ function cursorAnim(inteName) {
     console.log('cursor scale');
     scale.querySelector('img').style.visibility = "hidden";
   }
+}
+
+
+
+const emailInput = document.getElementById('email');
+const pseudoInput = document.getElementById('pseudo');
+function saveInfo() {
+  document.getElementById('score').value = score;
+  if(emailInput.value != '' && pseudoInput != ''){
+    let user = {
+      pseudo: pseudo.value,
+      email: emailInput.value
+    };
+
+    let userJSON = JSON.stringify(user);
+
+    localStorage.setItem("user", userJSON);
+
+    do_request();
+  }
+}
+
+
+function do_request() {
+  const user = JSON.parse(localStorage.getItem('user'));
+  const userScore = JSON.parse(localStorage.getItem('score'));
+  jQuery.ajax({
+    type: "GET",
+    url: "http://localhost/miecolo/wp-admin/admin-ajax.php",
+    data: {
+      action: 'rush_simulator_get_rank',
+      pseudo: user.pseudo,
+      email: user.email,
+      score: userScore
+    },
+    success: function (output) {
+      console.log("output success=", output);
+    },
+    error : function(error){ console.log("output error=", error) }
+  });
 }
