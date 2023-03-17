@@ -31,6 +31,7 @@ const hiveTemplate = document.getElementById("template-hive"),
 
 let scoreInterface = document.querySelector("#score");
 let honeyPotInterface = document.querySelector('.honey-pot');
+let lifeInterface = document.querySelector('#lives');
 // let hiveInfo = document.querySelectorAll('.hive-info');
 
 class Hive {
@@ -151,6 +152,7 @@ class Hive {
     this.isActive = false;
     lives--;
     this.isDead = true;
+    updateLives();
     document.querySelector("[data-id='"+ this.id +"']").style.backgroundImage = "url('../../assets/img-hives/ruche_normale.svg')";
     console.log("omg");
     destroyHive(this.id);
@@ -273,6 +275,7 @@ function game() {
     scoreInterval = setInterval(() => {
       updateScore();
       score ++;
+
     }, 700);
 
     // changement d'état des ruches
@@ -325,6 +328,10 @@ function updateHoneyPot() {
 
 function updateScore() {
   scoreInterface.innerHTML = `Score : ${score}`;
+}
+
+function updateLives(){
+  lifeInterface.innerHTML = `Life : ${lives}`;
 }
 
 function ratioScore(ratio) {
